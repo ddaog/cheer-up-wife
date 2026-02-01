@@ -29,6 +29,13 @@ export default function RootLayout({
         {/* Mobile Container Shell */}
         <div className="mx-auto min-h-screen max-w-md flex flex-col relative bg-transparent">
 
+          {/* Header */}
+          <header className="px-5 pt-6 pb-2">
+            <h1 className="text-xl font-black text-pink-500 tracking-tighter">
+              TO BE FAMILY
+            </h1>
+          </header>
+
           {/* Main Content */}
           <main className="flex-1 px-5 pt-8 pb-8 w-full animate-in fade-in duration-500">
             {children}

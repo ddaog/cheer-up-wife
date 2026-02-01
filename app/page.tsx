@@ -8,12 +8,31 @@ import { useSettings } from '@/lib/hooks/useSettings';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { getTodaysMessage, getRandomMessage } from '@/lib/utils/random';
 import { messages, Tone, Tag } from '@/lib/data/messages';
+import { Onboarding } from '@/components/Onboarding';
 import { Sparkles } from 'lucide-react';
 
 export default function Home() {
   const { settings } = useSettings();
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [savedIds, setSavedIds] = useLocalStorage<string[]>('cheer-saved', []);
   const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    // Check if onboarding is needed (empty nickname implies new user)
+    // We use a small timeout to let settings load from localStorage
+    if (!settings.nickname) {
+      setShowOnboarding(true);
+    }
+  }, [settings.nickname]);
+
+  // If onboarding takes place, we refresh the page or state after completion
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    // Force reload/re-render might be needed to apply settings instantly to randomizer
+    window.location.reload();
+  };
+
 
   // State for generator
   const [currentTone, setTone] = useState<Tone>('warm');
@@ -33,7 +52,7 @@ export default function Home() {
   };
 
   const handleNewMessage = () => {
-    const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek);
+    const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek, settings.mbti);
     setCurrentMessage(nextMsg);
   };
 
@@ -46,6 +65,10 @@ export default function Home() {
   };
 
   if (!isClient) return null; // Avoid hydration mismatch
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
 
   const todaysMessage = getTodaysMessage(messages, settings.pregnancyWeek || 12);
   const isSaved = savedIds.includes(currentMessage.id);

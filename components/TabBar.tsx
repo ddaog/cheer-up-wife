@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Heart, Settings, Home, BookOpen } from 'lucide-react';
+import { Heart, Settings, Home, BookOpen, Gift } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function TabBar() {
@@ -32,6 +32,13 @@ export function TabBar() {
                         active={pathname === '/saved'}
                         icon={<Heart className="w-[26px] h-[26px]" strokeWidth={2.5} />}
                         label="마음함"
+                    />
+
+                    <TabLink
+                        href="/coupon"
+                        active={pathname === '/coupon'}
+                        icon={<Gift className="w-[26px] h-[26px]" strokeWidth={2.5} />}
+                        label="쿠폰"
                     />
 
                     <TabLink

@@ -4,12 +4,14 @@ export interface Settings {
     nickname: string;
     signature: string;
     pregnancyWeek: number; // 1 to 40
+    mbti: string; // e.g. 'ENFP', 'ISTJ'
 }
 
 export const DEFAULT_SETTINGS: Settings = {
     nickname: '여보',
     signature: '',
     pregnancyWeek: 12, // Default to end of first trimester
+    mbti: '', // Default empty, prompts onboarding
 };
 
 export function useSettings() {

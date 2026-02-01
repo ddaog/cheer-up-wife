@@ -8,6 +8,7 @@ export function SettingsForm() {
     const [nickname, setNickname] = useState('');
     const [signature, setSignature] = useState('');
     const [weeks, setWeeks] = useState(12);
+    const [mbti, setMbti] = useState('ESTJ'); // Default
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
@@ -15,12 +16,13 @@ export function SettingsForm() {
             setNickname(settings.nickname);
             setSignature(settings.signature);
             setWeeks(settings.pregnancyWeek || 12);
+            setMbti(settings.mbti || 'ESTJ');
         }
     }, [settings]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        updateSettings({ nickname, signature, pregnancyWeek: weeks });
+        updateSettings({ nickname, signature, pregnancyWeek: weeks, mbti });
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
     };
@@ -63,6 +65,59 @@ export function SettingsForm() {
                         주수에 맞춰서 적절한 응원 메시지와 가이드를 추천해드립니다.
                     </p>
                 </div>
+            </div>
+
+            {/* MBTI Input */}
+            <div className="space-y-4">
+                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
+                    <span className="text-pink-500 font-bold">MBTI</span>
+                    아내의 성격 유형
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                    {['E', 'I'].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            onClick={() => setMbti(prev => type + prev.slice(1))}
+                            className={`p-3 rounded-xl font-bold transition-all ${mbti[0] === type ? 'bg-pink-500 text-white shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400'}`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                    {['S', 'N'].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            onClick={() => setMbti(prev => prev.slice(0, 1) + type + prev.slice(2))}
+                            className={`p-3 rounded-xl font-bold transition-all ${mbti[1] === type ? 'bg-pink-500 text-white shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400'}`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                    {['T', 'F'].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            onClick={() => setMbti(prev => prev.slice(0, 2) + type + prev.slice(3))}
+                            className={`p-3 rounded-xl font-bold transition-all ${mbti[2] === type ? 'bg-pink-500 text-white shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400'}`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                    {['J', 'P'].map(type => (
+                        <button
+                            key={type}
+                            type="button"
+                            onClick={() => setMbti(prev => prev.slice(0, 3) + type)}
+                            className={`p-3 rounded-xl font-bold transition-all ${mbti[3] === type ? 'bg-pink-500 text-white shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400'}`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                </div>
+                <p className="text-xs text-center text-gray-400">
+                    성격에 맞춰 위로의 방식을 조절해드려요. (T: 해결책 / F: 공감)
+                </p>
             </div>
 
             <div className="space-y-4">
