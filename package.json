@@ -6,7 +6,8 @@
     "next-dev": "next dev",
     "next-build": "next build",
     "dev": "granite dev",
-    "build": "granite build",
+    "build": "next build",
+    "build:ait": "granite build",
     "start": "next start",
     "lint": "eslint"
   },
