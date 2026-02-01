@@ -44,11 +44,13 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                                 🤰
                             </div>
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            <span className="text-pink-500">TO BE FAMILY</span>에<br />오신 것을 환영합니다
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
+                            <span className="text-pink-500">임신한 아내 격려</span><br />
+                            컨닝페이퍼 🤫
                         </h1>
                         <p className="text-gray-500">
-                            아내분에게 힘이 되는<br />따뜻한 말 한마디를 선물해 드릴게요.
+                            서툰 남편을 위한<br />
+                            실전 압축 응원 요약집입니다.
                         </p>
 
                         <div className="pt-4 text-left">

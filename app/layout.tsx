@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 import { TabBar } from '@/components/TabBar';
 
 export const metadata: Metadata = {
-  title: '아내를 위한 응원',
-  description: '임신한 아내에게 보내는 진심 어린 응원 메시지',
+  title: '임신한 아내 격려 컨닝페이퍼',
+  description: '서툰 남편을 위한 실전 압축 응원 요약집',
   manifest: '/manifest.json',
 };
 
@@ -31,8 +31,8 @@ export default function RootLayout({
 
           {/* Header */}
           <header className="px-5 pt-6 pb-2">
-            <h1 className="text-xl font-black text-pink-500 tracking-tighter">
-              TO BE FAMILY
+            <h1 className="text-xl font-black text-pink-500 tracking-tighter leading-tight break-keep">
+              임신한 아내 격려<br />컨닝페이퍼 🤫
             </h1>
           </header>
 
