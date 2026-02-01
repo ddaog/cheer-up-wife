@@ -1,65 +1,103 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { MessageCard } from '@/components/MessageCard';
+import { Controls } from '@/components/Controls';
+import { ActionButtons } from '@/components/ActionButtons';
+import { useSettings } from '@/lib/hooks/useSettings';
+import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
+import { getTodaysMessage, getRandomMessage } from '@/lib/utils/random';
+import { messages, Tone, Tag } from '@/lib/data/messages';
+import { Sparkles } from 'lucide-react';
 
 export default function Home() {
+  const { settings } = useSettings();
+  const [savedIds, setSavedIds] = useLocalStorage<string[]>('cheer-saved', []);
+  const [isClient, setIsClient] = useState(false);
+
+  // State for generator
+  const [currentTone, setTone] = useState<Tone>('warm');
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [currentMessage, setCurrentMessage] = useState(() => messages[0]); // Default initial
+
+  // Hydration fix
+  useEffect(() => {
+    setIsClient(true);
+    setCurrentMessage(getRandomMessage(messages, 'warm', []));
+  }, []);
+
+  const toggleTag = (tag: Tag) => {
+    setSelectedTags(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleNewMessage = () => {
+    const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek);
+    setCurrentMessage(nextMsg);
+  };
+
+  const handleSave = () => {
+    if (savedIds.includes(currentMessage.id)) {
+      setSavedIds(savedIds.filter(id => id !== currentMessage.id));
+    } else {
+      setSavedIds([...savedIds, currentMessage.id]);
+    }
+  };
+
+  if (!isClient) return null; // Avoid hydration mismatch
+
+  const todaysMessage = getTodaysMessage(messages, settings.pregnancyWeek || 12);
+  const isSaved = savedIds.includes(currentMessage.id);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="space-y-12">
+      {/* Today's Message Section */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm uppercase tracking-wider">
+          <Sparkles className="w-4 h-4" />
+          <span>오늘의 메시지</span>
+        </div>
+        <MessageCard
+          message={todaysMessage}
+          nickname={settings.nickname}
+          signature={settings.signature}
+          className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 border-none shadow-lg"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </section>
+
+      {/* Main Generator Section */}
+      <section className="space-y-8">
+        <div className="space-y-2 text-center">
+          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+            당신을 위한 한마디
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">기분과 상황에 맞춰 메시지를 찾아보세요.</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <Controls
+          currentTone={currentTone}
+          setTone={setTone}
+          selectedTags={selectedTags}
+          toggleTag={toggleTag}
+        />
+
+        <div className="relative">
+          <MessageCard
+            message={currentMessage}
+            nickname={settings.nickname}
+            signature={settings.signature}
+          />
         </div>
-      </main>
+
+        <ActionButtons
+          message={currentMessage}
+          isSaved={isSaved}
+          onSave={handleSave}
+          onNewMessage={handleNewMessage}
+          nickname={settings.nickname}
+        />
+      </section>
     </div>
   );
 }

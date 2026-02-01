@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ios-bg-light: #F2F2F7;
+  --color-ios-bg-dark: #000000;
+  --color-ios-card-light: #FFFFFF;
+  --color-ios-card-dark: #1C1C1E;
+  --color-ios-blue: #007AFF;
+  --color-ios-pink: #FF2D55;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --ios-bg-light: #F2F2F7;
+  --ios-bg-dark: #000000;
+  --ios-blue: #007AFF;
+  --ios-pink: #FF2D55;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--ios-bg-light);
+  background-image:
+    radial-gradient(at 100% 0%, hsla(330, 100%, 96%, 1) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, hsla(280, 100%, 96%, 1) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--ios-bg-dark);
+    background-image:
+      radial-gradient(at 100% 0%, hsla(330, 40%, 20%, 1) 0px, transparent 50%),
+      radial-gradient(at 0% 0%, hsla(280, 40%, 20%, 1) 0px, transparent 50%);
+  }
+}
+
+/* Custom Utilities */
+.ios-glass {
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .ios-glass {
+  background-color: rgba(30, 30, 30, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ios-active:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+  transition: transform 0.1s;
 }
