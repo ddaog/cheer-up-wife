@@ -14,7 +14,7 @@ export default defineConfig({
         port: 3000,
         commands: {
             dev: 'npm run next-dev',
-            build: 'npm run next-build',
+            build: 'IS_TOSS=true npm run next-build',
         },
     },
     permissions: [],

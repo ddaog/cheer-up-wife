@@ -1,15 +1,14 @@
 import type { NextConfig } from "next";
 
+const isToss = process.env.IS_TOSS === 'true';
+
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: isToss ? 'export' : undefined,
   images: {
     unoptimized: true,
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 
