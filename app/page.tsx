@@ -9,7 +9,7 @@ import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { getTodaysMessage, getRandomMessage } from '@/lib/utils/random';
 import { messages, Tone, Tag } from '@/lib/data/messages';
 import { Onboarding } from '@/components/Onboarding';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Settings as SettingsIcon } from 'lucide-react';
 
 export default function Home() {
   const { settings } = useSettings();
@@ -99,7 +99,7 @@ export default function Home() {
       {/* MBTI Badge */}
       <div className="flex justify-center -mt-2 mb-4">
         <span className={`px-4 py-1.5 rounded-full text-sm font-bold shadow-sm ${badgeColor} flex items-center gap-1.5 transition-all`}>
-          <Settings className="w-3.5 h-3.5" />
+          <SettingsIcon className="w-3.5 h-3.5" />
           {badgeText}
         </span>
       </div>
@@ -109,12 +109,14 @@ export default function Home() {
           <Sparkles className="w-4 h-4" />
           <span>오늘의 메시지</span>
         </div>
-        <MessageCard
-          message={todaysMessage}
-          nickname={settings.nickname}
-          signature={settings.signature}
-          className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 border-none shadow-lg"
-        />
+        {todaysMessage ? (
+          <MessageCard
+            message={todaysMessage}
+            nickname={settings.nickname}
+            signature={settings.signature}
+            className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 border-none shadow-lg"
+          />
+        ) : null}
       </section>
 
       {/* Main Generator Section */}
@@ -134,11 +136,19 @@ export default function Home() {
         />
 
         <div className="relative">
-          <MessageCard
-            message={currentMessage}
-            nickname={settings.nickname}
-            signature={settings.signature}
-          />
+          <div className="relative">
+            {currentMessage && currentMessage.tone ? (
+              <MessageCard
+                message={currentMessage}
+                nickname={settings.nickname}
+                signature={settings.signature}
+              />
+            ) : (
+              <div className="p-8 text-center bg-gray-100 rounded-2xl dark:bg-gray-800">
+                <p className="text-gray-500">메시지를 불러오고 있어요...</p>
+              </div>
+            )}
+          </div>
         </div>
 
         <ActionButtons
