@@ -15,10 +15,18 @@ export function MessageCard({ message, nickname, signature, className }: Message
     const formattedText = formatMessage(message.content, nickname, signature);
 
     // iOS System Gradients for subtle background
-    const gradientHint = {
+    // iOS System Gradients for subtle background
+    const gradientHint: Record<string, string> = {
         calm: "from-blue-100/30 to-transparent dark:from-blue-900/20",
+        rational: "from-blue-100/30 to-transparent dark:from-blue-900/20",
+        stern: "from-blue-100/30 to-transparent dark:from-blue-900/20",
+
         warm: "from-orange-100/30 to-transparent dark:from-orange-900/20",
-        cheerful: "from-yellow-100/30 to-transparent dark:from-yellow-900/20"
+        emotional: "from-orange-100/30 to-transparent dark:from-orange-900/20",
+        sad: "from-orange-100/30 to-transparent dark:from-orange-900/20",
+
+        cheerful: "from-yellow-100/30 to-transparent dark:from-yellow-900/20",
+        cheer: "from-yellow-100/30 to-transparent dark:from-yellow-900/20",
     };
 
     return (
