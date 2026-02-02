@@ -3,12 +3,7 @@ import { Heart, Share, RotateCw, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Message } from '@/lib/data/messages';
 
-interface ActionButtonsProps {
-    onSave: () => void;
-    isSaved: boolean;
-    onShare: () => Promise<void>;
-    currentMessage?: Message; // kept for legacy if needed, but unused in simplified view
-}
+
 
 export function ActionButtons({ onSave, isSaved, onShare }: { onSave: () => void, isSaved: boolean, onShare: () => void }) {
     const [copied, setCopied] = useState(false);
