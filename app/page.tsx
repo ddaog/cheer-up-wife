@@ -103,60 +103,53 @@ export default function Home() {
           {badgeText}
         </span>
       </div>
-      {/* Today's Message Section */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm uppercase tracking-wider">
-          <Sparkles className="w-4 h-4" />
-          <span>오늘의 메시지</span>
-        </div>
-        {todaysMessage ? (
-          <MessageCard
-            message={todaysMessage}
-            nickname={settings.nickname}
-            signature={settings.signature}
-            className="bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 border-none shadow-lg"
-          />
-        ) : null}
-      </section>
+      {/* Quick MBTI Toggle */}
+      <div className="flex justify-between items-center bg-white dark:bg-[#1C1C1E] p-1.5 rounded-full border border-gray-100 dark:border-white/5 mb-6 mx-auto w-full max-w-[280px] shadow-sm relative z-10">
+        <button
+          onClick={() => {
+            const newMbti = settings.mbti.replace(/[TF]/, 'T');
+            updateSettings({ mbti: newMbti });
+          }}
+          className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${settings.mbti.includes('T') ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 shadow-sm' : 'text-gray-400 opacity-70'}`}
+        >
+          T (해결책) 🛠️
+        </button>
+        <button
+          onClick={() => {
+            const newMbti = settings.mbti.replace(/[TF]/, 'F');
+            updateSettings({ mbti: newMbti });
+          }}
+          className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${settings.mbti.includes('F') ? 'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-300 shadow-sm' : 'text-gray-400 opacity-70'}`}
+        >
+          F (공감) ❤️
+        </button>
+      </div>
 
-      {/* Main Generator Section */}
-      <section className="space-y-8">
-        <div className="space-y-2 text-center">
-          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-            당신을 위한 한마디
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">기분과 상황에 맞춰 메시지를 찾아보세요.</p>
-        </div>
-
-        <Controls
-          currentTone={currentTone}
-          setTone={setTone}
-          selectedTags={selectedTags}
-          toggleTag={toggleTag}
-        />
-
+      {/* Main Card Section */}
+      <section className="flex flex-col flex-1 justify-center relative z-0 min-h-[500px]">
         <div className="relative">
-          <div className="relative">
-            {currentMessage && currentMessage.tone ? (
-              <MessageCard
-                message={currentMessage}
-                nickname={settings.nickname}
-                signature={settings.signature}
-              />
-            ) : (
-              <div className="p-8 text-center bg-gray-100 rounded-2xl dark:bg-gray-800">
-                <p className="text-gray-500">메시지를 불러오고 있어요...</p>
-              </div>
-            )}
-          </div>
+          {currentMessage && currentMessage.tone ? (
+            <MessageCard
+              message={currentMessage}
+              nickname={settings.nickname}
+              signature={settings.signature}
+              onClick={handleNewMessage}
+            />
+          ) : (
+            <div className="p-8 text-center bg-gray-100 rounded-2xl dark:bg-gray-800 animate-pulse">
+              <p className="text-gray-500">컨닝페이퍼 찾는 중...</p>
+            </div>
+          )}
+
+          <p className="text-center text-xs text-gray-400 mt-4 animate-bounce">
+            👆 카드를 눌러서 다음 장 넘기기
+          </p>
         </div>
 
         <ActionButtons
-          message={currentMessage}
-          isSaved={isSaved}
           onSave={handleSave}
-          onNewMessage={handleNewMessage}
-          nickname={settings.nickname}
+          isSaved={isSaved}
+          onShare={handleShare}
         />
       </section>
     </div>
