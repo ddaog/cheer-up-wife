@@ -18,11 +18,14 @@ const TONES: { value: Tone; label: string; icon: React.ReactNode }[] = [
 
 const TAGS: { value: Tag; label: string }[] = [
     { value: 'condition', label: '컨디션' },
-    { value: 'hospital', label: '병원' },
     { value: 'food', label: '식사' },
     { value: 'sleep', label: '수면' },
     { value: 'emotion', label: '감정' },
+    { value: 'hospital', label: '병원' },
     { value: 'prep', label: '출산준비' },
+    { value: 'baby', label: '태아' },
+    { value: 'love', label: '사랑' },
+    { value: 'safety', label: '조심' },
 ];
 
 export function Controls({ currentTone, setTone, selectedTags, toggleTag }: ControlsProps) {

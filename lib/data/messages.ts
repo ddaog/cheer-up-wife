@@ -1,5 +1,5 @@
-export type Tone = 'calm' | 'warm' | 'cheerful';
-export type Tag = 'condition' | 'hospital' | 'food' | 'sleep' | 'emotion' | 'prep';
+export type Tone = 'calm' | 'warm' | 'cheerful' | 'rational' | 'emotional' | 'sad' | 'stern' | 'cheer';
+export type Tag = 'condition' | 'hospital' | 'food' | 'sleep' | 'emotion' | 'prep' | 'item' | 'health' | 'activity' | 'safety' | 'touch' | 'weather' | 'thanks' | 'love' | 'empathy' | 'baby' | 'praise' | 'support' | 'hope' | 'comfort';
 export type Trimester = 'early' | 'middle' | 'late' | 'all';
 
 export interface Message {
@@ -53,4 +53,29 @@ export const messages: Message[] = [
     { id: 'a6', content: '갑자기 우울해지면 참지 말고 울어도 돼. 다 호르몬 때문이고, 당연한 감정이야.', tone: 'calm', tags: ['emotion'], trimester: 'all' },
     { id: 'a7', content: '오늘 점심은 맛있는 거 먹었어? 영양가 있는 거 잘 챙겨 먹어야 해.', tone: 'calm', tags: ['food'], trimester: 'all' },
     { id: 'a8', content: '무거운 건 절대 들지 마. 나 뒀다 뭐해? 이럴 때 쓰라고 있는 남편이야!', tone: 'cheerful', tags: ['condition'], trimester: 'all' },
+
+    // --- EXTRA MBTI SPECIFIC (T=Reason/Solution, F=Emotion/Support) ---
+    // T-Type (Solution-focused, Practical, Efficiency)
+    { id: 't1', content: '{nickname}, 유산균이랑 철분제 챙겨먹었어? 알람 맞춰둘까?', tone: 'calm', tags: ['condition', 'food'], trimester: 'all' },
+    { id: 't2', content: '오늘 병원 다녀오느라 고생했어. 다음 검진일은 캘린더에 미리 넣어뒀어.', tone: 'rational', tags: ['hospital', 'prep'], trimester: 'all' },
+    { id: 't3', content: '입덧캔디랑 크래커 다 떨어져가네. 오늘 퇴근길에 올리브영 들러서 사갈게.', tone: 'rational', tags: ['food', 'prep'], trimester: 'early' },
+    { id: 't4', content: '허리 많이 아프지? 임산부 바디필로우 후기 좋은 걸로 주문했어. 내일 도착한대.', tone: 'rational', tags: ['condition', 'item'], trimester: 'middle' },
+    { id: 't5', content: '출산 가방 리스트 내가 엑셀로 정리해봤어. 빠진 거 있나 한번 봐줄래?', tone: 'rational', tags: ['prep'], trimester: 'late' },
+    { id: 't6', content: '발 부종에는 족욕이 효과적이래. 물 온도 맞춰둘 테니 10분만 하고 자자.', tone: 'rational', tags: ['condition', 'health'], trimester: 'late' },
+    { id: 't7', content: '오늘 저녁 메뉴 고민하지 마. 당신 좋아하는 그 집에서 포장해갈게. 시간만 말해.', tone: 'rational', tags: ['food'], trimester: 'all' },
+    { id: 't8', content: '{nickname}, 무거운 건 절대 들지 마. 현관 앞에 둬, 내가 들어가서 정리할게.', tone: 'stern', tags: ['activity', 'safety'], trimester: 'all' },
+    { id: 't9', content: '튼살 크림 바를 시간이야. 귀찮아도 지금 발라야 나중에 후회 안 한대. 내가 발라줄게.', tone: 'rational', tags: ['condition', 'touch'], trimester: 'middle' },
+    { id: 't10', content: '오늘 날씨가 춥대. 나갈 때 핫팩 챙기고, 미끄러우니까 운동화 신고 가.', tone: 'stern', tags: ['safety', 'weather'], trimester: 'all' },
+
+    // F-Type (Emotion-focused, Empathy, Validation)
+    { id: 'f1', content: '{nickname}, 요즘 몸도 마음도 많이 힘들지? 그래도 우리 아기 위해 견뎌줘서 너무 고마워.', tone: 'emotional', tags: ['emotion', 'thanks'], trimester: 'all' },
+    { id: 'f2', content: '거울 볼 때마다 속상해하지 마. 내 눈에는 세상에서 제일 아름다운 엄마야.', tone: 'warm', tags: ['emotion', 'love'], trimester: 'middle' },
+    { id: 'f3', content: '오늘 밤은 아무 걱정 하지 말고 푹 잤으면 좋겠다. 내가 옆에서 지켜줄게.', tone: 'warm', tags: ['sleep', 'love'], trimester: 'all' },
+    { id: 'f4', content: '입덧 때문에 먹고 싶은 것도 못 먹고... 내가 대신 아파해주고 싶다. 미안하고 사랑해.', tone: 'sad', tags: ['condition', 'empathy'], trimester: 'early' },
+    { id: 'f5', content: '태동 느낄 때마다 당신이랑 아기가 연결된 게 신기하고 벅차. 정말 위대하고 멋져.', tone: 'emotional', tags: ['baby', 'praise'], trimester: 'middle' },
+    { id: 'f6', content: '몸이 무거워서 자존감 떨어진다는 말... 마음 아파. 당신은 지금 기적을 만들고 있는 거야.', tone: 'emotional', tags: ['emotion', 'support'], trimester: 'late' },
+    { id: 'f7', content: '우리 셋이 함께할 날도 머지않았네. 당신 닮은 아기라면 얼마나 예쁠까?', tone: 'cheerful', tags: ['baby', 'hope'], trimester: 'late' },
+    { id: 'f8', content: '하루하루 변해가는 당신 모습이 나한테는 감동이야. 매일 더 사랑스러워.', tone: 'warm', tags: ['love', 'praise'], trimester: 'all' },
+    { id: 'f9', content: '{nickname}, 가끔은 그냥 울어도 돼. 억지로 강한 척하지 않아도 돼. 내가 다 받아줄게.', tone: 'emotional', tags: ['emotion', 'comfort'], trimester: 'all' },
+    { id: 'f10', content: '오늘 하루도 우리 아기 품고 있느라 진짜 고생 많았어. 쓰담쓰담.', tone: 'cheer', tags: ['emotion', 'praise'], trimester: 'all' },
 ];

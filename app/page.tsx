@@ -73,8 +73,36 @@ export default function Home() {
   const todaysMessage = getTodaysMessage(messages, settings.pregnancyWeek || 12);
   const isSaved = savedIds.includes(currentMessage.id);
 
+  // MBTI Logic for Badge
+  const mbti = settings.mbti || '';
+  const isT = mbti.includes('T');
+  const isF = mbti.includes('F');
+
+  // Decide badge text and color based on MBTI
+  let badgeText = '아내 맞춤 설정';
+  let badgeColor = 'bg-gray-100 text-gray-500';
+
+  if (mbti.length === 4) {
+    badgeText = `${mbti} 아내 맞춤 설정`;
+    if (isT) {
+      badgeText += ' (논리형)';
+      badgeColor = 'bg-blue-50 text-blue-600 border border-blue-100';
+    } else if (isF) {
+      badgeText += ' (공감형)';
+      badgeColor = 'bg-pink-50 text-pink-600 border border-pink-100';
+    }
+  }
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-6">
+
+      {/* MBTI Badge */}
+      <div className="flex justify-center -mt-2 mb-4">
+        <span className={`px-4 py-1.5 rounded-full text-sm font-bold shadow-sm ${badgeColor} flex items-center gap-1.5 transition-all`}>
+          <Settings className="w-3.5 h-3.5" />
+          {badgeText}
+        </span>
+      </div>
       {/* Today's Message Section */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-bold text-sm uppercase tracking-wider">

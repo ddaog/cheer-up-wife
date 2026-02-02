@@ -34,6 +34,12 @@ export function getTodaysMessage(messages: Message[], weeks: number): Message {
     return candidates[randomIndex];
 }
 
+const TONE_GROUPS: Record<string, Tone[]> = {
+    calm: ['calm', 'rational', 'stern'],
+    warm: ['warm', 'emotional', 'sad'],
+    cheerful: ['cheerful', 'cheer'],
+};
+
 export function getRandomMessage(
     messages: Message[],
     currentTone?: Tone,
@@ -50,9 +56,11 @@ export function getRandomMessage(
         );
     }
 
-    // 2. Tone filtering (Optional override by manual selection)
+    // 2. Tone filtering (with grouping)
     if (currentTone) {
-        candidates = candidates.filter(msg => msg.tone === currentTone);
+        // If the UI selects 'calm', we also allow 'rational' and 'stern'
+        const allowedTones = TONE_GROUPS[currentTone] || [currentTone];
+        candidates = candidates.filter(msg => allowedTones.includes(msg.tone));
     }
 
     // 3. Trimester prioritization
@@ -63,24 +71,27 @@ export function getRandomMessage(
     let finalPool = trimesterMatches.length > 0 ? trimesterMatches : candidates;
 
     // 4. MBTI Weighting (Only if tone wasn't manually selected)
-    // If the user didn't pick a specific tone, we can subtly bias the random selection based on MBTI
+    // If user didn't pick a tone, bias selection based on MBTI
     if (!currentTone && mbti.length === 4) {
-        const isThinking = mbti[2] === 'T'; // 3rd letter is T/F
+        const isThinking = mbti[2] === 'T';
         const isFeeling = mbti[2] === 'F';
 
         if (isThinking) {
-            // T types prefer Calm/Rational messages. Boost 'calm' tone probability.
-            // We do this by duplicating 'calm' messages in the pool or filtering. 
-            // Let's try a softer approach: 70% chance to pick from 'calm', 30% random.
-            const calmMessages = finalPool.filter(m => m.tone === 'calm');
-            if (calmMessages.length > 0 && Math.random() < 0.6) {
-                finalPool = calmMessages;
+            // T types prefer Calm/Rational group
+            const calmGroup = [...(TONE_GROUPS['calm'] || []), 'calm'];
+            const targetMessages = finalPool.filter(m => calmGroup.includes(m.tone));
+
+            // 60% chance to force-pick a T-type message if available
+            if (targetMessages.length > 0 && Math.random() < 0.6) {
+                finalPool = targetMessages;
             }
         } else if (isFeeling) {
-            // F types prefer Warm/Cheerful.
-            const emotionalMessages = finalPool.filter(m => m.tone === 'warm' || m.tone === 'cheerful');
-            if (emotionalMessages.length > 0 && Math.random() < 0.6) {
-                finalPool = emotionalMessages;
+            // F types prefer Warm/Cheerful group
+            const feelGroup = [...(TONE_GROUPS['warm'] || []), ...(TONE_GROUPS['cheerful'] || []), 'warm', 'cheerful'];
+            const targetMessages = finalPool.filter(m => feelGroup.includes(m.tone));
+
+            if (targetMessages.length > 0 && Math.random() < 0.6) {
+                finalPool = targetMessages;
             }
         }
     }
