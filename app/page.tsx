@@ -39,11 +39,14 @@ export default function Home() {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [currentMessage, setCurrentMessage] = useState(() => messages[0]); // Default initial
 
-  // Hydration fix
+  // Hydration fix & Auto-refresh on MBTI change
   useEffect(() => {
     setIsClient(true);
-    setCurrentMessage(getRandomMessage(messages, 'warm', []));
-  }, []);
+    // Refresh message if MBTI changes (and it's not the initial mount)
+    // We pass settings.mbti to getRandomMessage to ensure weighting is applied
+    const msg = getRandomMessage(messages, undefined, [], settings.pregnancyWeek, settings.mbti);
+    setCurrentMessage(msg);
+  }, [settings.mbti, settings.pregnancyWeek]);
 
   const toggleTag = (tag: Tag) => {
     setSelectedTags(prev =>
@@ -128,8 +131,9 @@ export default function Home() {
       <div className="flex justify-between items-center bg-white dark:bg-[#1C1C1E] p-1.5 rounded-full border border-gray-100 dark:border-white/5 mb-6 mx-auto w-full max-w-[280px] shadow-sm relative z-10">
         <button
           onClick={() => {
-            const newMbti = settings.mbti.replace(/[TF]/, 'T');
-            updateSettings({ mbti: newMbti });
+            let newMbti = settings.mbti || 'ISTJ';
+            if (!newMbti.match(/[TF]/)) newMbti = 'ISTJ';
+            updateSettings({ mbti: newMbti.replace(/[TF]/, 'T') });
           }}
           className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${settings.mbti.includes('T') ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 shadow-sm' : 'text-gray-400 opacity-70'}`}
         >
@@ -137,8 +141,9 @@ export default function Home() {
         </button>
         <button
           onClick={() => {
-            const newMbti = settings.mbti.replace(/[TF]/, 'F');
-            updateSettings({ mbti: newMbti });
+            let newMbti = settings.mbti || 'ISFJ';
+            if (!newMbti.match(/[TF]/)) newMbti = 'ISFJ';
+            updateSettings({ mbti: newMbti.replace(/[TF]/, 'F') });
           }}
           className={`flex-1 py-1.5 text-xs font-bold rounded-full transition-all ${settings.mbti.includes('F') ? 'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-300 shadow-sm' : 'text-gray-400 opacity-70'}`}
         >
