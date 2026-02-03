@@ -9,7 +9,7 @@ import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { getTodaysMessage, getRandomMessage } from '@/lib/utils/random';
 import { messages, Tone, Tag } from '@/lib/data/messages';
 import { Onboarding } from '@/components/Onboarding';
-import { Sparkles, Settings as SettingsIcon } from 'lucide-react';
+import { Sparkles, Settings as SettingsIcon, ThumbsUp, ThumbsDown } from 'lucide-react';
 
 export default function Home() {
   const { settings, updateSettings } = useSettings();
@@ -90,6 +90,20 @@ export default function Home() {
     }
   };
 
+  // Feedback State
+  const [feedback, setFeedback] = useState<'good' | 'bad' | null>(null);
+
+  // Reset feedback when message changes
+  useEffect(() => {
+    setFeedback(null);
+  }, [currentMessage]);
+
+  const handleFeedback = (type: 'good' | 'bad') => {
+    setFeedback(type);
+    // Here you would typically send analytics
+    console.log(`User feedback for message ${currentMessage.id}: ${type}`);
+  };
+
   if (!isClient) return null; // Avoid hydration mismatch
 
   if (showOnboarding) {
@@ -103,6 +117,7 @@ export default function Home() {
   const mbti = settings.mbti || '';
   const isT = mbti.includes('T');
   const isF = mbti.includes('F');
+
 
   // Decide badge text and color based on MBTI
   let badgeText = '아내 맞춤 설정';
@@ -204,9 +219,28 @@ export default function Home() {
             </div>
           )}
 
+
           <p className="text-center text-xs text-gray-400 mt-4 animate-bounce">
             👆 카드를 눌러서 다음 장 넘기기
           </p>
+        </div>
+
+        {/* Feedback Buttons */}
+        <div className="flex justify-center gap-4 mt-6 mb-2">
+          <button
+            onClick={() => handleFeedback('good')}
+            className={`p-3 rounded-full transition-all ${feedback === 'good' ? 'bg-green-100 text-green-600 scale-110 shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20'}`}
+            disabled={feedback !== null}
+          >
+            <ThumbsUp className={`w-5 h-5 ${feedback === 'good' ? 'fill-current' : ''}`} />
+          </button>
+          <button
+            onClick={() => handleFeedback('bad')}
+            className={`p-3 rounded-full transition-all ${feedback === 'bad' ? 'bg-red-100 text-red-600 scale-110 shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'}`}
+            disabled={feedback !== null}
+          >
+            <ThumbsDown className={`w-5 h-5 ${feedback === 'bad' ? 'fill-current' : ''}`} />
+          </button>
         </div>
 
         <ActionButtons
