@@ -35,7 +35,8 @@ export default function Home() {
 
 
   // State for generator
-  const [currentTone, setTone] = useState<Tone>('warm');
+  // We initialize tone as undefined so MBTI logic takes precedence by default
+  const [currentTone, setTone] = useState<Tone | undefined>(undefined);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [currentMessage, setCurrentMessage] = useState(() => messages[0]); // Default initial
 
@@ -55,6 +56,7 @@ export default function Home() {
   };
 
   const handleNewMessage = () => {
+    // Pass currentTone (which is undefined by default) so getRandomMessage uses MBTI logic
     const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek, settings.mbti);
     setCurrentMessage(nextMsg);
   };
