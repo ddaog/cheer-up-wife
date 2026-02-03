@@ -131,7 +131,7 @@ export default function Home() {
       </div>
 
       {/* Quick Week Selector */}
-      <div className="flex items-center justify-center gap-4 mb-4">
+      <div className="flex items-center justify-center gap-4 mb-4 relative z-20 bg-white/50 dark:bg-black/20 backdrop-blur-sm py-2 px-6 rounded-2xl border border-white/20">
         <button
           onClick={() => {
             const currentWeek = settings.pregnancyWeek || 12;
@@ -143,13 +143,13 @@ export default function Home() {
         >
           -
         </button>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center min-w-[100px]">
           <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
             임신 {settings.pregnancyWeek || 12}주차
           </span>
           <span className="text-[10px] text-gray-400">
-            {getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'early' ? '초기' :
-              getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'middle' ? '중기' : '후기'}
+            {getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'early' ? '초기 (조심조심)' :
+              getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'middle' ? '중기 (안정기)' : '후기 (만삭)'}
           </span>
         </div>
         <button
