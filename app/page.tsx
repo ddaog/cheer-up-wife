@@ -12,7 +12,7 @@ import { Onboarding } from '@/components/Onboarding';
 import { Sparkles, Settings as SettingsIcon } from 'lucide-react';
 
 export default function Home() {
-  const { settings } = useSettings();
+  const { settings, updateSettings } = useSettings();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [savedIds, setSavedIds] = useLocalStorage<string[]>('cheer-saved', []);
   const [isClient, setIsClient] = useState(false);
@@ -54,6 +54,27 @@ export default function Home() {
   const handleNewMessage = () => {
     const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek, settings.mbti);
     setCurrentMessage(nextMsg);
+  };
+
+  // Share functionality
+  const handleShare = async () => {
+    try {
+      const shareData = {
+        title: '남편의 응원 메시지',
+        text: currentMessage.content,
+        url: window.location.href,
+      };
+
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(currentMessage.content);
+        // Optional: you could add a toast state here if you want to verify copy success
+        // For now, simpler is better to avoid complex state
+      }
+    } catch (error) {
+      console.error('Sharing failed', error);
+    }
   };
 
   const handleSave = () => {
