@@ -129,6 +129,41 @@ export default function Home() {
           {badgeText}
         </span>
       </div>
+
+      {/* Quick Week Selector */}
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <button
+          onClick={() => {
+            const currentWeek = settings.pregnancyWeek || 12;
+            if (currentWeek > 1) {
+              updateSettings({ pregnancyWeek: currentWeek - 1 });
+            }
+          }}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-[#1C1C1E] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 shadow-sm border border-gray-100 dark:border-white/5 active:scale-95 transition-all"
+        >
+          -
+        </button>
+        <div className="flex flex-col items-center">
+          <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
+            임신 {settings.pregnancyWeek || 12}주차
+          </span>
+          <span className="text-[10px] text-gray-400">
+            {getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'early' ? '초기' :
+              getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'middle' ? '중기' : '후기'}
+          </span>
+        </div>
+        <button
+          onClick={() => {
+            const currentWeek = settings.pregnancyWeek || 12;
+            if (currentWeek < 42) {
+              updateSettings({ pregnancyWeek: currentWeek + 1 });
+            }
+          }}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-[#1C1C1E] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 shadow-sm border border-gray-100 dark:border-white/5 active:scale-95 transition-all"
+        >
+          +
+        </button>
+      </div>
       {/* Quick MBTI Toggle */}
       <div className="flex justify-between items-center bg-white dark:bg-[#1C1C1E] p-1.5 rounded-full border border-gray-100 dark:border-white/5 mb-6 mx-auto w-full max-w-[280px] shadow-sm relative z-10">
         <button
