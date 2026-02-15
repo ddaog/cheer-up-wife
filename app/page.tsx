@@ -6,7 +6,7 @@ import { Controls } from '@/components/Controls';
 import { ActionButtons } from '@/components/ActionButtons';
 import { useSettings } from '@/lib/hooks/useSettings';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
-import { getTodaysMessage, getRandomMessage } from '@/lib/utils/random';
+import { getTodaysMessage, getRandomMessage, getTrimester } from '@/lib/utils/random';
 import { messages, Tone, Tag } from '@/lib/data/messages';
 import { Onboarding } from '@/components/Onboarding';
 import { Sparkles, Settings as SettingsIcon, ThumbsUp, ThumbsDown } from 'lucide-react';
@@ -163,8 +163,8 @@ export default function Home() {
             임신 {settings.pregnancyWeek || 12}주차
           </span>
           <span className="text-[10px] text-gray-400">
-            {getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'early' ? '초기 (조심조심)' :
-              getTodaysMessage(messages, settings.pregnancyWeek || 12).trimester === 'middle' ? '중기 (안정기)' : '후기 (만삭)'}
+            {getTrimester(settings.pregnancyWeek || 12) === 'early' ? '초기 (조심조심)' :
+              getTrimester(settings.pregnancyWeek || 12) === 'middle' ? '중기 (안정기)' : '후기 (만삭)'}
           </span>
         </div>
         <button
