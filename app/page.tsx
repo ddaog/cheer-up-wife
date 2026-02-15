@@ -10,6 +10,7 @@ import { getTodaysMessage, getRandomMessage, getTrimester } from '@/lib/utils/ra
 import { messages, Tone, Tag } from '@/lib/data/messages';
 import { Onboarding } from '@/components/Onboarding';
 import { Sparkles, Settings as SettingsIcon, ThumbsUp, ThumbsDown } from 'lucide-react';
+import * as analytics from '@/lib/utils/analytics';
 
 export default function Home() {
   const { settings, updateSettings } = useSettings();
@@ -55,7 +56,26 @@ export default function Home() {
     );
   };
 
+  // Click tracking for activation event
+  const [clickCount, setClickCount] = useState(0);
+
   const handleNewMessage = () => {
+    // Analytics: track click
+    analytics.trackClick('message_card');
+
+    const nextCount = clickCount + 1;
+    setClickCount(nextCount);
+
+    // Activation event on 3rd click
+    if (nextCount === 3) {
+      analytics.event({
+        action: 'activation',
+        category: 'engagement',
+        label: '메시지 3회 클릭',
+        activation_type: '메시지 3회 클릭'
+      });
+    }
+
     // Pass currentTone (which is undefined by default) so getRandomMessage uses MBTI logic
     const nextMsg = getRandomMessage(messages, currentTone, selectedTags, settings.pregnancyWeek, settings.mbti);
     setCurrentMessage(nextMsg);
@@ -63,6 +83,14 @@ export default function Home() {
 
   // Share functionality
   const handleShare = async () => {
+    // Analytics: track share
+    analytics.event({
+      action: 'share',
+      category: 'interaction',
+      label: '공유하기'
+    });
+    analytics.trackClick('share');
+
     try {
       const shareData = {
         title: '남편의 응원 메시지',
@@ -83,6 +111,7 @@ export default function Home() {
   };
 
   const handleSave = () => {
+    analytics.trackClick('save');
     if (savedIds.includes(currentMessage.id)) {
       setSavedIds(savedIds.filter(id => id !== currentMessage.id));
     } else {
@@ -99,6 +128,7 @@ export default function Home() {
   }, [currentMessage]);
 
   const handleFeedback = (type: 'good' | 'bad') => {
+    analytics.trackClick(`feedback_${type}`);
     setFeedback(type);
     // Here you would typically send analytics
     console.log(`User feedback for message ${currentMessage.id}: ${type}`);
@@ -149,6 +179,7 @@ export default function Home() {
       <div className="flex items-center justify-center gap-4 mb-4 relative z-20 bg-white/50 dark:bg-black/20 backdrop-blur-sm py-2 px-6 rounded-2xl border border-white/20">
         <button
           onClick={() => {
+            analytics.trackClick('week_decrement');
             const currentWeek = settings.pregnancyWeek || 12;
             if (currentWeek > 1) {
               updateSettings({ pregnancyWeek: currentWeek - 1 });
@@ -169,6 +200,7 @@ export default function Home() {
         </div>
         <button
           onClick={() => {
+            analytics.trackClick('week_increment');
             const currentWeek = settings.pregnancyWeek || 12;
             if (currentWeek < 42) {
               updateSettings({ pregnancyWeek: currentWeek + 1 });
@@ -183,6 +215,7 @@ export default function Home() {
       <div className="flex justify-between items-center bg-white dark:bg-[#1C1C1E] p-1.5 rounded-full border border-gray-100 dark:border-white/5 mb-6 mx-auto w-full max-w-[280px] shadow-sm relative z-10">
         <button
           onClick={() => {
+            analytics.trackClick('mbti_t');
             let newMbti = settings.mbti || 'ISTJ';
             if (!newMbti.match(/[TF]/)) newMbti = 'ISTJ';
             updateSettings({ mbti: newMbti.replace(/[TF]/, 'T') });
@@ -193,6 +226,7 @@ export default function Home() {
         </button>
         <button
           onClick={() => {
+            analytics.trackClick('mbti_f');
             let newMbti = settings.mbti || 'ISFJ';
             if (!newMbti.match(/[TF]/)) newMbti = 'ISFJ';
             updateSettings({ mbti: newMbti.replace(/[TF]/, 'F') });

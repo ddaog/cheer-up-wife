@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '@/lib/hooks/useSettings';
 import { Save, Calendar } from 'lucide-react';
 import { getTrimester } from '@/lib/utils/random';
+import { trackClick } from '@/lib/utils/analytics';
 
 export function SettingsForm() {
     const { settings, updateSettings } = useSettings();
@@ -22,6 +23,7 @@ export function SettingsForm() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        trackClick('settings_save');
         updateSettings({ nickname, signature, pregnancyWeek: weeks, mbti });
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
@@ -108,7 +110,10 @@ export function SettingsForm() {
                         <button
                             key={type}
                             type="button"
-                            onClick={() => setMbti(prev => prev.slice(0, 3) + type)}
+                            onClick={() => {
+                                trackClick(`settings_mbti_${type}`);
+                                setMbti(prev => prev.slice(0, 3) + type);
+                            }}
                             className={`p-3 rounded-xl font-bold transition-all ${mbti[3] === type ? 'bg-pink-500 text-white shadow-md' : 'bg-white dark:bg-[#1C1C1E] text-gray-400'}`}
                         >
                             {type}

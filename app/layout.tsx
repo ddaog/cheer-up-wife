@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import Link from 'next/link';
+import Script from 'next/script';
 import { Heart, Settings, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TabBar } from '@/components/TabBar';
@@ -25,6 +26,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=G-JXGH4P99G3`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-JXGH4P99G3', {
+              service_name: 'cheer-up-wife'
+            });
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen font-sans selection:bg-pink-100 dark:selection:bg-pink-900 pb-24">
         {/* Mobile Container Shell */}
         <div className="mx-auto min-h-screen max-w-md flex flex-col relative bg-transparent">

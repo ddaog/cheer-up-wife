@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useSettings } from '@/lib/hooks/useSettings';
 import { Sparkles, ArrowRight, Heart } from 'lucide-react';
+import { trackClick } from '@/lib/utils/analytics';
 
 export function Onboarding({ onComplete }: { onComplete: () => void }) {
     const { updateSettings } = useSettings();
@@ -14,6 +15,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
     const [mbti, setMbti] = useState('ESTJ');
 
     const handleComplete = () => {
+        trackClick('onboarding_complete');
         updateSettings({
             nickname: nickname || '여보',
             signature: '사랑하는 남편이',
@@ -68,7 +70,10 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                         </div>
 
                         <button
-                            onClick={() => setStep(2)}
+                            onClick={() => {
+                                trackClick('onboarding_step1_next');
+                                setStep(2);
+                            }}
                             disabled={!nickname}
                             className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
@@ -99,7 +104,10 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                         </div>
 
                         <button
-                            onClick={() => setStep(3)}
+                            onClick={() => {
+                                trackClick('onboarding_step2_next');
+                                setStep(3);
+                            }}
                             className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2"
                         >
                             다음으로

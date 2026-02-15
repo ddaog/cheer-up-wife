@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Heart, Settings, Home, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { trackClick } from '@/lib/utils/analytics';
 
 export function TabBar() {
     const pathname = usePathname();
@@ -53,6 +54,7 @@ function TabLink({ href, active, icon, label }: { href: string; active: boolean;
     return (
         <Link
             href={href}
+            onClick={() => trackClick(label, 'link')}
             className={cn(
                 "flex flex-col items-center gap-1 min-w-[64px] transition-colors duration-200 active:scale-95",
                 active
