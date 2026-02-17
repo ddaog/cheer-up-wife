@@ -7,6 +7,11 @@ const openai = new OpenAI({
 });
 
 export async function generateEncouragement(situation: string, mbti: string, weeks: number) {
+    if (!process.env.OPENAI_API_KEY) {
+        console.error('OPENAI_API_KEY is not defined in environment variables');
+        throw new Error('서버 설정 오류: API 키가 누락되었습니다. 관리자에게 문의해주세요.');
+    }
+
     if (!situation || situation.length > 100) {
         throw new Error('상황은 1자 이상 100자 이하로 입력해주세요.');
     }
