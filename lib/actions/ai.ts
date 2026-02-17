@@ -37,8 +37,24 @@ export async function generateEncouragement(situation: string, mbti: string, wee
         });
 
         return response.choices[0].message.content;
-    } catch (error) {
-        console.error('OpenAI Error:', error);
+    } catch (error: any) {
+        console.error('OpenAI Error Details:', {
+            message: error.message,
+            status: error.status,
+            type: error.type,
+            code: error.code,
+            param: error.param
+        });
+
+        // Return a more descriptive error for internal debugging if needed
+        if (error.status === 401) {
+            throw new Error('OpenAI API 키가 유효하지 않습니다. 관리자에게 문의해주세요.');
+        } else if (error.status === 429) {
+            throw new Error('OpenAI 할당량(Quota)을 초과했거나 결제 수단 확인이 필요합니다.');
+        } else if (error.status === 402) {
+            throw new Error('OpenAI 계정의 잔액이 부족하거나 결제가 필요합니다.');
+        }
+
         throw new Error('메시지 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
 }
