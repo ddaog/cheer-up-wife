@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Heart, Settings, Home, BookOpen } from 'lucide-react';
+import { Heart, Settings, Home, BookOpen, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { trackClick } from '@/lib/utils/analytics';
 
@@ -36,6 +36,14 @@ export function TabBar() {
                     />
 
 
+
+                    <TabLink
+                        href="/ai"
+                        onClick={() => trackClick('AI 케어', 'link')}
+                        active={pathname === '/ai'}
+                        icon={<Sparkles className="w-[26px] h-[26px]" strokeWidth={2.5} />}
+                        label="AI 케어"
+                    />
 
                     <TabLink
                         href="/settings"
